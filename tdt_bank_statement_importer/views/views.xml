@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <record id="bank_statement_form_import_button" model="ir.ui.view">
+    <field name="name">Bank Statement Import Wizard</field>
+    <field name="type">form</field>
+    <field name="model">account.bank.statement</field>
+    <field name="inherit_id" ref="account.view_bank_statement_form"/>
+    <field name="arch" type="xml">
+      <xpath expr="//field[@name='move_line_count']" position="after">
+	<button icon="fa-upload" string="Import"
+		type="object" name="csv_import"/>
+      </xpath>
+    </field>
+  </record>
+  <record id="bank_statement_import_wizard" model="ir.ui.view">
+    <field name="name">Bank Statement Import Wizard</field>
+    <field name="type">form</field>
+    <field name="model">tdt.bank_statement_importer</field>
+    <field name="arch" type="xml">
+      <group>
+	<field name="csv"/>
+	<field name="encoding"/>
+	<field name="delimiter"/>
+	<field name="bank"/>
+      </group>
+      <footer>
+	<button name="process" type="object"
+                class="btn-success" style="float: right;"
+                string="Import" icon="fa-upload"/>
+        <button name="act_cancel" special="cancel" type="object"
+                class="btn-default"
+                string="Cancel" icon="fa-ban"/>
+      </footer>
+    </field>
+  </record>
+</odoo>

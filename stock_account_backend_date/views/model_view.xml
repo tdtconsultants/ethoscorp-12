@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--picking form-->
+    <record id="view_picking_form" model="ir.ui.view">
+        <field name="name">stock.picking.form.backend_date</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='scheduled_date']" position="after">
+                <field name="set_effective_date"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

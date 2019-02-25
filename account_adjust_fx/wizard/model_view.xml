@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_account_move_adjustfx" model="ir.ui.view">
+        <field name="name">account.move.adjustfx.view.form</field>
+        <field name="model">account.move.adjustfx</field>
+        <field name="arch" type="xml">
+            <form string="Journal Entry Adjust FX?">
+                <group>
+                    <group>
+                        <field name="date_from"/>
+			<field name="journal_ids" options="{'no_create': True}" widget="many2many_tags"/>
+			<field name="company_id" options="{'no_create': True}" groups="base.group_multi_company"/>
+                    </group>
+                    <group>
+                        <field name="date_to"/>
+			<field name="state"/>
+                    </group>
+                </group>
+                <group>
+                    <p>
+                        System will be update currency rate of all entries according to the filter.
+                    </p>
+                </group>
+                <footer>
+                    <button name="action_apply" string="Apply" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_account_move_adjustfx" model="ir.actions.act_window">
+	<field name="name">Journal AdjustFX </field>
+	<field name="type">ir.actions.act_window</field>
+	<field name="res_model">account.move.adjustfx</field>
+	<field name="view_type">form</field>
+	<field name="view_mode">form</field>
+	<field name="target">new</field>
+	<field name="view_id" ref="view_account_move_adjustfx"/>
+    </record>
+
+    <menuitem action="action_account_move_adjustfx" id="menu_account_move_adjustfx" parent="account.menu_finance_entries_accounting_entries" groups="account.group_account_user" sequence="3"/>
+</odoo>

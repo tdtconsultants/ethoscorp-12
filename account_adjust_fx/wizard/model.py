@@ -33,9 +33,10 @@ class AccountMoveAdjustfx(models.TransientModel):
             jounal_name_list = [restricted_journal.name for restricted_journal in restricted_journal_ids]
             raise UserError(_("You cannot modify a posted entry of this following journal %s. First you should set the journal to allow cancelling entries. ") % (jounal_name_list))
 
-
         for account_move in self.env['account.move'].search(domain):
             state = account_move.state
+            total_debit = 0
+            total_credit = 0
             if state == 'posted':account_move.button_cancel()
             for line in account_move.line_ids:
                 debit = 0
@@ -47,18 +48,14 @@ class AccountMoveAdjustfx(models.TransientModel):
                     debit = amount > 0 and amount or 0.0
                     credit = amount < 0 and -amount or 0.0   
                     self.env.cr.execute("update account_move_line set debit = %s,credit = %s where id = %s" % (debit,credit,line.id))
-            account_move.line_ids._onchange_amount_currency()
+                    total_debit += debit
+                    total_credit += credit
+            if total_debit != total_credit:raise UserError(_("Cannot create unbalanced journal entry of %s. ") % (account_move.name))
+            self.env.cr.execute("update account_move set amount = %s where id = %s" % (total_debit,account_move.id))
+#            account_move.line_ids._onchange_amount_currency()
             if state == 'posted':account_move.post()
         return {'type': 'ir.actions.client', 'tag': 'reload',}
 
-
-
-
-
-
-
-
-        return True
 
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
